@@ -11,6 +11,9 @@
             ],
             "c/app": [
                 "app/app.js"
+            ],
+            "c/dataTable": [
+                "dataTable/dataTable.js"
             ]
         }
     },
