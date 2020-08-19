@@ -1,7 +1,63 @@
 <template>
-    <lightning-datatable
-        key-field="id"
-        data={data.data}
-        columns={columns}>
-    </lightning-datatable>
+  <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+    <thead>
+      <tr class="slds-line-height_reset">
+        <template if:true={columnData} for:each={columnData} for:item="column">
+          <th key={column} class="" scope="col">
+            <div class="slds-truncate" title={column}>
+              {column}
+            </div>
+          </th>
+        </template>
+      </tr>
+    </thead>
+    <tbody>
+      <template if:true={cellsData} for:each={cellsData} for:item="record">
+        <tr key={record.Id} class="slds-hint-parent">
+          <td>
+            <div class="slds-truncate">{record.Name}</div>
+          </td>
+          <td>
+            <div class="slds-truncate">{record.Phone}</div>
+          </td>
+          <td>
+            <div class="slds-truncate">{record.Fax}</div>
+          </td>
+          <td>
+            <div class="slds-truncate">{record.Email}</div>
+          </td>
+          <td>
+            <div class="slds-truncate">{record.Department}</div>
+          </td>
+          <td>
+            <div class="slds-truncate">{record.Birthdate}</div>
+          </td>
+        </tr>
+      </template>
+    </tbody>
+  </table>
+  <div
+    class="slds-grid slds-grid_vertical-align-end slds-p-bottom_medium slds-p-top_xx-small slds-grid_align-center"
+  >
+    <div class="slds-col slds-size_3-of-12">
+      <lightning-button
+        class="slds-m-right_medium"
+        disabled={isPrevBtnDisabled}
+        onclick={prevHandler}
+        variant="Neutral"
+        label="PreviousPage"
+      ></lightning-button>
+
+      <span class="slds-p-right_large">
+        page {currentPage} of {lastPage}
+      </span>
+
+      <lightning-button
+        disabled={isNextBtnDisabled}
+        onclick={nextHandler}
+        variant="Neutral"
+        label="Next Page"
+      ></lightning-button>
+    </div>
+  </div>
 </template>

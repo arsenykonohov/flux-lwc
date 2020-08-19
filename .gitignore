@@ -1,3 +1,4 @@
 /.sfdx/**
 
 /config/**
+node_modules

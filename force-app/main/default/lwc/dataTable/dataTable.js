@@ -1,18 +1,39 @@
-import { LightningElement, wire } from 'lwc';
-import getContacts from '@salesforce/apex/StorageController.getContacts';
-
-const columns = [
-    {label: 'Opportunity name', fieldName: 'Name', type: 'text'},
-    {label: 'Phone', fieldName: 'Phone', type: 'phone'},
-    {label: 'Fax', fieldName: 'Fax', type: 'phone'},
-    {label: 'Email', fieldName: 'Email', type: 'email'},
-    {label: 'Department', fieldName: 'Department', type: 'text'},
-    {label: 'Birthdate', fieldName: 'Birthdate', type: 'date'},
-]
+import { LightningElement } from 'lwc';
+import { tableStorage } from 'c/storages';
+import { dispatcher } from 'c/dispatcher';
 
 export default class DataTable extends LightningElement {
-    columns = columns;
+  columnData;
+  cellsData;
+  currentPage;
+  lastPage;
+  isPrevBtnDisabled;
+  isNextBtnDisabled;
 
-    @wire(getContacts)
-    data
+  constructor() {
+    super();
+    tableStorage.subscribe(this.storageCallback.bind(this));
+    dispatcher.dispatch({ type: 'INIT' });
+  }
+
+  storageCallback(dataFromStorage) {
+    this.cellsData = dataFromStorage.cellsData;
+    this.columnData = dataFromStorage.columnData;
+    this.lastPage = dataFromStorage.lastPage;
+    this.currentPage = dataFromStorage.currentPage;
+
+    if (this.currentPage === 1) this.isPrevBtnDisabled = true;
+    else this.isPrevBtnDisabled = false;
+
+    if (this.currentPage === this.lastPage) this.isNextBtnDisabled = true;
+    else this.isNextBtnDisabled = false;
+  }
+
+  prevHandler() {
+    dispatcher.dispatch({ type: 'PREV-PAGE' });
+  }
+
+  nextHandler() {
+    dispatcher.dispatch({ type: 'NEXT-PAGE' });
+  }
 }
