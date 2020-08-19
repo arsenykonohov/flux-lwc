@@ -80,7 +80,9 @@ class TableStorage extends Storage {
   }
 
   async initComponent() {
-    this.changeStorageData(await this._dispatchRequest({ params: this.params }));
+    this.changeStorageData(
+      await this._dispatchRequest({ params: this.params })
+    );
     this._sendDataToSubs(this.storage);
   }
 
@@ -90,6 +92,10 @@ class TableStorage extends Storage {
       currentPage: this.storage.currentPage - 1,
     };
   }
+}
+
+class ContactCardStorage extends Storage {
+    
 }
 
 const tableStorage = new TableStorage();

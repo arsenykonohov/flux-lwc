@@ -1,17 +1,33 @@
 public without sharing class StorageController {
     private static final List<String> columnData = new List<String>{
-            'Name',
-            'Phone',
-            'Fax',
-            'Email',
-            'Department',
-            'Birthdate'
+        'Name',
+        'Phone',
+        'Fax',
+        'Email',
+        'Department',
+        'Birthdate'
+    };
+
+    private static final List<String> fieldsForQuery = new List<String>{
+        'Id',
+        'Name',
+        'Phone',
+        'Fax',
+        'MobilePhone',
+        'Email',
+        'Title',
+        'Department',
+        'AssistantName',
+        'LeadSource',
+        'Birthdate',
+        'Level__c',
+        'Languages__c'
     };
 
     @AuraEnabled
     public static Response getContacts(ParamsWrapper params){
         SoqlService soql = new SoqlService('Contact');
-        soql.setFields(columnData);
+        soql.setFields(fieldsForQuery);
         soql.setLimit(params.pageSize);
         soql.setOffset(params.pageSize * params.currentPage);
 

@@ -11,7 +11,7 @@
         </template>
       </tr>
     </thead>
-    <tbody>
+    <tbody onclick={clickOnRowHandler}>
       <template if:true={cellsData} for:each={cellsData} for:item="record">
         <tr key={record.Id} class="slds-hint-parent">
           <td>

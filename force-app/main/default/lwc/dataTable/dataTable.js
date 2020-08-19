@@ -36,4 +36,8 @@ export default class DataTable extends LightningElement {
   nextHandler() {
     dispatcher.dispatch({ type: 'NEXT-PAGE' });
   }
+
+  clickOnRowHandler(event) {
+    console.log(JSON.parse(JSON.stringify(event)));
+  }
 }
