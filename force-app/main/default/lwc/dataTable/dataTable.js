@@ -17,7 +17,6 @@ export default class DataTable extends LightningElement {
   }
 
   storageCallback(dataFromStorage) {
-    console.log('dataFromStorage', dataFromStorage);
     this.cellsData = dataFromStorage.cellsData;
     this.columnData = dataFromStorage.columnData;
     this.lastPage = dataFromStorage.lastPage;

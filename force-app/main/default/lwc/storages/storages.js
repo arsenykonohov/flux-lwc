@@ -9,21 +9,17 @@ class Storage {
     this.subscribers.push(cb);
   }
 
-  changeStorageData = (data) => {
+  changeStorageData = async (data) => {
     return { ...this.storage, ...data };
-  };
-
-  saveStorageData = (data) => {
-    this.storage = { ...this.storage, ...data };
   };
 
   initComponent() {
     this._sendDataToSubs(this.storage);
   }
 
-  _sendDataToSubs = () => {
-    console.log('_sendDataToSubs', this.storage);
-    this.subscribers.forEach((cb) => cb(this.storage));
+  _sendDataToSubs = (storage) => {
+    this.subscribers.forEach((cb) => cb(storage));
+    return storage;
   };
 
   _memoizeAsync(func) {
@@ -60,24 +56,22 @@ class TableStorage extends Storage {
     this.storage.currentPage = 1;
     this.storage.pageSize = 5;
     this._dispatchRequest = this._memoizeAsync(this._dispatchRequest);
-    // this.getRecordById = this._memoizeSync(this.getRecordById);
+    this.getRecordById = this._memoizeSync(this.getRecordById);
 
     this._makeRequestAndSendData = this.compose(
       this.changeStorageData,
       this._getParams,
       this._dispatchRequest,
-      this.saveStorageData,
       this._sendDataToSubs
     );
   }
 
-  changePage(payload) {
-    this._makeRequestAndSendData(payload);
+  async changePage(payload) {
+    this.storage = await this._makeRequestAndSendData(payload);
   }
 
-  initComponent() {
-    console.log(this.storage);
-    this._makeRequestAndSendData(this.storage);
+  async initComponent() {
+    this.storage = await this._makeRequestAndSendData(this.storage);
   }
 
   getRecordById(recordId) {
@@ -85,7 +79,6 @@ class TableStorage extends Storage {
   }
 
   async _dispatchRequest(params) {
-    console.log('params', params);
     return getContacts({ params: params }).then((result) => {
       return {
         tableData: result,
@@ -93,12 +86,12 @@ class TableStorage extends Storage {
         lastPage: Math.ceil(result.amountOfRecords / params.pageSize),
         cellsData: result.cellsData,
         currentPage: params.currentPage + 1,
+        pageSize: params.pageSize
       };
     });
   }
 
   _getParams(storage) {
-    console.log('GET PARAMS', storage);
     return {
       pageSize: storage.pageSize,
       currentPage: storage.currentPage - 1,

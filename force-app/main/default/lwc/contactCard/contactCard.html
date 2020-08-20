@@ -33,8 +33,9 @@
         <lightning-input type="text" label="LeadSource" readonly value={contactRecord.LeadSource}></lightning-input>
         <lightning-input type="date" label="Birthdate" readonly value={contactRecord.Birthdate}></lightning-input>
         <lightning-input type="text" label="Level__c" readonly value={contactRecord.Level__c}></lightning-input>
-        <lightning-input type="text" label="Languages__" readonly value={contactRecord.Languages__}></lightning-input>
+        <lightning-input type="text" label="Languages__" readonly value={contactRecord.Languages__c}></lightning-input>
       </div>
+      <ligtning-button></ligtning-button>
     </template>
 
     <template if:false={contactRecord}>

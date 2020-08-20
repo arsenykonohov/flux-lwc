@@ -12,7 +12,6 @@ class Dispatcher {
 
       case 'VIEW-CONTACT-CARD':
         const contactRecord = tableStorage.getRecordById(action.payload);
-        console.log(contactRecord);
         contactCardStorage.changeStorageDataAndSendToSubs({ contactRecord: contactRecord });
         break;
 
