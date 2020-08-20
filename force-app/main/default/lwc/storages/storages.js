@@ -1,4 +1,5 @@
 import getContacts from '@salesforce/apex/StorageController.getContacts';
+
 class Storage {
   subscribers = [];
   storage = {};
@@ -8,30 +9,49 @@ class Storage {
     this.subscribers.push(cb);
   }
 
-  _sendDataToSubs(storage) {
-    this.subscribers.forEach((cb) => cb(storage));
-  }
+  changeStorageData = (data) => {
+    return { ...this.storage, ...data };
+  };
 
-  changeStorageData(data) {
+  saveStorageData = (data) => {
     this.storage = { ...this.storage, ...data };
-  }
+  };
 
   initComponent() {
     this._sendDataToSubs(this.storage);
   }
 
-  memoize(func) {
-    return async (args) => {
+  _sendDataToSubs = () => {
+    console.log('_sendDataToSubs', this.storage);
+    this.subscribers.forEach((cb) => cb(this.storage));
+  };
+
+  _memoizeAsync(func) {
+    return async (...args) => {
       const cacheKey = JSON.stringify(args);
 
       if (Object.keys(this.cache).includes(cacheKey) === false) {
-        this.cache[cacheKey] = await func(args);
+        this.cache[cacheKey] = await func.apply(this, args);
         return this.cache[cacheKey];
       } else {
         return Promise.resolve(this.cache[cacheKey]);
       }
     };
   }
+
+  _memoizeSync(func) {
+    return (...args) => {
+      const cacheKey = JSON.stringify(args);
+
+      if (Object.keys(this.cache).includes(cacheKey) === false) {
+        this.cache[cacheKey] = func.apply(this, args);
+      }
+
+      return this.cache[cacheKey];
+    };
+  }
+
+  compose = (...fns) => (x) => fns.reduce((acc, fn) => acc.then(fn), Promise.resolve(x));
 }
 
 class TableStorage extends Storage {
@@ -39,65 +59,59 @@ class TableStorage extends Storage {
     super();
     this.storage.currentPage = 1;
     this.storage.pageSize = 5;
-    this._dispatchRequest = this.memoize(this._dispatchRequest.bind(this));
+    this._dispatchRequest = this._memoizeAsync(this._dispatchRequest);
+    // this.getRecordById = this._memoizeSync(this.getRecordById);
+
+    this._makeRequestAndSendData = this.compose(
+      this.changeStorageData,
+      this._getParams,
+      this._dispatchRequest,
+      this.saveStorageData,
+      this._sendDataToSubs
+    );
   }
 
-  async nextPage() {
-    this.storage.currentPage++;
-    this.changeStorageData(
-      await this._dispatchRequest({ params: this.params })
-    );
-    this._sendDataToSubs(this.storage);
+  changePage(payload) {
+    this._makeRequestAndSendData(payload);
   }
 
-  async prevPage() {
-    this.storage.currentPage--;
-    this.changeStorageData(
-      await this._dispatchRequest({ params: this.params })
-    );
-    this._sendDataToSubs(this.storage);
+  initComponent() {
+    console.log(this.storage);
+    this._makeRequestAndSendData(this.storage);
+  }
+
+  getRecordById(recordId) {
+    return this.storage.cellsData.find((cellData) => cellData.Id === recordId);
   }
 
   async _dispatchRequest(params) {
-    return getContacts(params).then((result) => {
-      const storage = {};
-      storage.tableData = result;
-      storage.columnData = result.columnData;
-      storage.lastPage = Math.ceil(
-        result.amountOfRecords / params.params.pageSize
-      );
-
-      storage.cellsData = result.cellsData.map((record) => {
-        return storage.columnData.reduce((acc, field) => {
-          acc[field] = record[field];
-
-          return acc;
-        }, {});
-      });
-
-      return storage;
+    console.log('params', params);
+    return getContacts({ params: params }).then((result) => {
+      return {
+        tableData: result,
+        columnData: result.columnData,
+        lastPage: Math.ceil(result.amountOfRecords / params.pageSize),
+        cellsData: result.cellsData,
+        currentPage: params.currentPage + 1,
+      };
     });
   }
 
-  async initComponent() {
-    this.changeStorageData(
-      await this._dispatchRequest({ params: this.params })
-    );
-    this._sendDataToSubs(this.storage);
-  }
-
-  get params() {
+  _getParams(storage) {
+    console.log('GET PARAMS', storage);
     return {
-      pageSize: this.storage.pageSize,
-      currentPage: this.storage.currentPage - 1,
+      pageSize: storage.pageSize,
+      currentPage: storage.currentPage - 1,
     };
   }
 }
 
 class ContactCardStorage extends Storage {
-    
+  constructor() {
+    super();
+    this.changeStorageDataAndSendToSubs = this.compose(this.changeStorageData, this._sendDataToSubs);
+  }
 }
 
-const tableStorage = new TableStorage();
-
-export { tableStorage };
+export const tableStorage = new TableStorage();
+export const contactCardStorage = new ContactCardStorage();

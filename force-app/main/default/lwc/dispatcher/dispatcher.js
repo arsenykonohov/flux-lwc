@@ -1,4 +1,4 @@
-import { tableStorage } from 'c/storages';
+import { tableStorage, contactCardStorage } from 'c/storages';
 class Dispatcher {
   dispatch(action) {
     switch (action.type) {
@@ -6,12 +6,14 @@ class Dispatcher {
         tableStorage.initComponent();
         break;
 
-      case 'PREV-PAGE':
-        tableStorage.prevPage();
+      case 'CHANGE-PAGE':
+        tableStorage.changePage(action.payload);
         break;
 
-      case 'NEXT-PAGE':
-        tableStorage.nextPage();
+      case 'VIEW-CONTACT-CARD':
+        const contactRecord = tableStorage.getRecordById(action.payload);
+        console.log(contactRecord);
+        contactCardStorage.changeStorageDataAndSendToSubs({ contactRecord: contactRecord });
         break;
 
       default:

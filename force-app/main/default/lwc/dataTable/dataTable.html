@@ -11,34 +11,41 @@
         </template>
       </tr>
     </thead>
-    <tbody onclick={clickOnRowHandler}>
+    <tbody>
       <template if:true={cellsData} for:each={cellsData} for:item="record">
         <tr key={record.Id} class="slds-hint-parent">
           <td>
             <div class="slds-truncate">{record.Name}</div>
           </td>
+
           <td>
             <div class="slds-truncate">{record.Phone}</div>
           </td>
+
           <td>
             <div class="slds-truncate">{record.Fax}</div>
           </td>
+
           <td>
             <div class="slds-truncate">{record.Email}</div>
           </td>
+
           <td>
             <div class="slds-truncate">{record.Department}</div>
           </td>
+
           <td>
             <div class="slds-truncate">{record.Birthdate}</div>
+          </td>
+
+          <td>
+            <lightning-button variant="neutral" label="View" data-value={record.Id} onclick={clickOnRowHandler}></lightning-button>
           </td>
         </tr>
       </template>
     </tbody>
   </table>
-  <div
-    class="slds-grid slds-grid_vertical-align-end slds-p-bottom_medium slds-p-top_xx-small slds-grid_align-center"
-  >
+  <div class="slds-grid slds-grid_vertical-align-end slds-p-bottom_medium slds-p-top_xx-small slds-grid_align-center">
     <div class="slds-col slds-size_3-of-12">
       <lightning-button
         class="slds-m-right_medium"
@@ -52,12 +59,7 @@
         page {currentPage} of {lastPage}
       </span>
 
-      <lightning-button
-        disabled={isNextBtnDisabled}
-        onclick={nextHandler}
-        variant="Neutral"
-        label="Next Page"
-      ></lightning-button>
+      <lightning-button disabled={isNextBtnDisabled} onclick={nextHandler} variant="Neutral" label="Next Page"></lightning-button>
     </div>
   </div>
 </template>

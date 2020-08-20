@@ -17,6 +17,7 @@ export default class DataTable extends LightningElement {
   }
 
   storageCallback(dataFromStorage) {
+    console.log('dataFromStorage', dataFromStorage);
     this.cellsData = dataFromStorage.cellsData;
     this.columnData = dataFromStorage.columnData;
     this.lastPage = dataFromStorage.lastPage;
@@ -30,14 +31,14 @@ export default class DataTable extends LightningElement {
   }
 
   prevHandler() {
-    dispatcher.dispatch({ type: 'PREV-PAGE' });
+    dispatcher.dispatch({ type: 'CHANGE-PAGE', payload: { currentPage: this.currentPage - 1 } });
   }
 
   nextHandler() {
-    dispatcher.dispatch({ type: 'NEXT-PAGE' });
+    dispatcher.dispatch({ type: 'CHANGE-PAGE', payload: { currentPage: this.currentPage + 1 } });
   }
 
   clickOnRowHandler(event) {
-    console.log(JSON.parse(JSON.stringify(event)));
+    dispatcher.dispatch({ type: 'VIEW-CONTACT-CARD', payload: event.target.dataset.value });
   }
 }
