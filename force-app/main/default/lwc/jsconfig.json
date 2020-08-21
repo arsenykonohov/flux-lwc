@@ -17,6 +17,9 @@
             ],
             "c/contactCard": [
                 "contactCard/contactCard.js"
+            ],
+            "c/prefList": [
+                "prefList/prefList.js"
             ]
         }
     },

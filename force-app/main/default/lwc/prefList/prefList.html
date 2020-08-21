@@ -1,0 +1,123 @@
+<template>
+  <lightning-button variant="neutral" label="Show Pref List" onclick={showBucketHandler}></lightning-button>
+
+  <template if:true={isListShow}>
+    <div class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="close" onclick={closeBucketHandler}>&times;</span>
+
+          <span>Bucket</span>
+        </div>
+
+        <div class="modal-body d-table">
+          <div class="d-table">
+            <div class="d-tr">
+              <div class="d-td">Name of product</div>
+              <div class="d-td"></div>
+            </div>
+            <template if:true={prefList} for:each={prefList} for:item="record">
+              <div key={record.Id} class="d-tr">
+                <div class="d-td" title={record.Name}>{record.Name}</div>
+
+                <div class="d-td">
+                  <lightning-button variant="neutral" label="View" data-value={record.Id} onclick={viewContactInfo}></lightning-button>
+
+                  <lightning-button variant="neutral" label="Delete" data-value={record.Id} onclick={deleteFromPrefList}></lightning-button>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <lightning-button variant="neutral" label="Order" onclick={orderGoodsHandler}></lightning-button>
+        </div>
+      </div>
+    </div>
+  </template>
+</template>
+
+<!-- 
+<template>
+    <lightning-button variant="neutral" label="Show Pref List" onclick={showList}></lightning-button>
+  
+    <template if:true={isListShow}>
+      <div class="demo-only demo-only_viewport" style="height: 640px;">
+        <section
+          role="dialog"
+          tabindex="-1"
+          class="slds-modal slds-fade-in-open slds-modal_small"
+          aria-labelledby="id-of-modalheader-h2"
+          aria-modal="true"
+          aria-describedby="modal-content-id-1"
+        >
+          <div class="slds-modal__container">
+            <header class="slds-modal__header">
+              <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick={closeList} title="Close">
+                <lightning-icon icon-name="utility:close" alternative-text="Close"></lightning-icon>
+              </button>
+              <h2 id="id-of-modalheader-h2" class="slds-text-heading_medium">Preference List</h2>
+            </header>
+  
+            <div class="slds-modal__content slds-grid slds-nowrap" id="modal-content-id-1">
+              <div class="slds-col slds-grid slds-grid_vertical slds-nowrap">
+                <div class="slds-p-vertical_x-small slds-p-horizontal_large slds-shrink-none slds-theme_shade">
+                  <div class="slds-text-title slds-m-top_x-small" aria-live="polite">{prefList.length} contacts</div>
+                </div>
+  
+                <div class="slds-scrollable slds-grow">
+                  <div class="slds-scrollable_none">
+                    <table
+                      aria-multiselectable="true"
+                      class="slds-table slds-table_header-hidden slds-no-row-hover slds-table_bordered"
+                      role="grid"
+                    >
+                      <thead class="slds-assistive-text">
+                        <tr class="slds-line-height_reset">
+                          <th class="" scope="col" style="width: 3rem;"></th>
+                          <th aria-label="Product Name" class="" scope="col">
+                            <div class="slds-truncate" title="Product Name">Contact Name</div>
+                          </th>
+                        </tr>
+                      </thead>
+  
+                      <tbody>
+                        <template if:true={prefList} for:each={prefList} for:item="record">
+                          <tr key={record.Id} aria-selected="false" class="slds-hint-parent">
+                            <td role="gridcell">
+                              <div class="slds-truncate" title={record.Name}>{record.Name}</div>
+                            </td>
+  
+                            <td role="gridcell">
+                              <div>
+                                <lightning-button
+                                  variant="neutral"
+                                  label="View"
+                                  data-value={record.Id}
+                                  onclick={viewContactInfo}
+                                ></lightning-button>
+  
+                                <lightning-button
+                                  variant="neutral"
+                                  label="Delete From List"
+                                  data-value={record.Id}
+                                  onclick={deleteFromPrefList}
+                                ></lightning-button>
+                              </div>
+                            </td>
+                          </tr>
+                        </template>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <footer class="slds-modal__footer"></footer>
+          </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+      </div>
+    </template>
+  </template> -->

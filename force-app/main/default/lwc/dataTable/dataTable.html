@@ -39,7 +39,8 @@
           </td>
 
           <td>
-            <lightning-button variant="neutral" label="View" data-value={record.Id} onclick={clickOnRowHandler}></lightning-button>
+            <lightning-button variant="neutral" label="View" data-value={record.Id} onclick={viewContactInfoHandler}></lightning-button>
+            <lightning-button variant="neutral" label="Add To Pref List" data-value={record.Id} onclick={addToPrefList}></lightning-button>
           </td>
         </tr>
       </template>

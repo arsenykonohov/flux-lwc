@@ -9,6 +9,10 @@ class Storage {
     this.subscribers.push(cb);
   }
 
+  unsubscribe(cb) {
+    this.subscribers = this.subscribers.filter((sub) => sub !== cb);
+  }
+
   changeStorageData = async (data) => {
     return { ...this.storage, ...data };
   };
@@ -58,12 +62,7 @@ class TableStorage extends Storage {
     this._dispatchRequest = this._memoizeAsync(this._dispatchRequest);
     this.getRecordById = this._memoizeSync(this.getRecordById);
 
-    this._makeRequestAndSendData = this.compose(
-      this.changeStorageData,
-      this._getParams,
-      this._dispatchRequest,
-      this._sendDataToSubs
-    );
+    this._makeRequestAndSendData = this.compose(this.changeStorageData, this._getParams, this._dispatchRequest, this._sendDataToSubs);
   }
 
   async changePage(payload) {
@@ -86,7 +85,7 @@ class TableStorage extends Storage {
         lastPage: Math.ceil(result.amountOfRecords / params.pageSize),
         cellsData: result.cellsData,
         currentPage: params.currentPage + 1,
-        pageSize: params.pageSize
+        pageSize: params.pageSize,
       };
     });
   }
@@ -100,11 +99,32 @@ class TableStorage extends Storage {
 }
 
 class ContactCardStorage extends Storage {
+  _changeStorageDataAndSendToSubs = this.compose(this.changeStorageData, this._sendDataToSubs);
+
+  async changeStorageDataAndSendToSubs(payload) {
+    this.storage = await this._changeStorageDataAndSendToSubs(payload);
+  }
+}
+
+class PrefListStorage extends Storage {
   constructor() {
     super();
-    this.changeStorageDataAndSendToSubs = this.compose(this.changeStorageData, this._sendDataToSubs);
+    this.storage.prefList = new Set();
+  }
+
+  _addRecordToPrefList = (data) => {
+    this.storage.prefList.add(data);
+    return this.storage;
+  };
+
+  _addRecordToPrefListAndSendDataToSubs = this.compose(this._addRecordToPrefList, this._sendDataToSubs);
+
+  async addRecordToPrefListAndSendDataToSubs(payload) {
+    console.log(payload);
+    this.storage = await this._addRecordToPrefListAndSendDataToSubs(payload);
   }
 }
 
 export const tableStorage = new TableStorage();
 export const contactCardStorage = new ContactCardStorage();
+export const prefListStorage = new PrefListStorage();

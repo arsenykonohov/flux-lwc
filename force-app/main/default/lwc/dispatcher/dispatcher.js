@@ -1,19 +1,28 @@
-import { tableStorage, contactCardStorage } from 'c/storages';
+import { tableStorage, contactCardStorage, prefListStorage } from 'c/storages';
 class Dispatcher {
   dispatch(action) {
     switch (action.type) {
-      case 'INIT':
+      case 'INIT': {
         tableStorage.initComponent();
         break;
+      }
 
-      case 'CHANGE-PAGE':
+      case 'CHANGE-PAGE': {
         tableStorage.changePage(action.payload);
         break;
+      }
 
-      case 'VIEW-CONTACT-CARD':
+      case 'VIEW-CONTACT-CARD': {
         const contactRecord = tableStorage.getRecordById(action.payload);
         contactCardStorage.changeStorageDataAndSendToSubs({ contactRecord: contactRecord });
         break;
+      }
+
+      case 'ADD-TO-PREF-LIST': {
+        const contactRecord = tableStorage.getRecordById(action.payload);
+        prefListStorage.addRecordToPrefListAndSendDataToSubs(contactRecord);
+        break;
+      }
 
       default:
         break;

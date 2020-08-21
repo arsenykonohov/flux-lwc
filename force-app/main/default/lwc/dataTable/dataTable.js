@@ -37,7 +37,11 @@ export default class DataTable extends LightningElement {
     dispatcher.dispatch({ type: 'CHANGE-PAGE', payload: { currentPage: this.currentPage + 1 } });
   }
 
-  clickOnRowHandler(event) {
+  viewContactInfoHandler(event) {
     dispatcher.dispatch({ type: 'VIEW-CONTACT-CARD', payload: event.target.dataset.value });
+  }
+
+  addToPrefList(event) {
+    dispatcher.dispatch({ type: 'ADD-TO-PREF-LIST', payload: event.target.dataset.value });
   }
 }
