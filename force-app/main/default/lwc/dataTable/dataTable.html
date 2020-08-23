@@ -1,9 +1,9 @@
 <template>
-  <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+  <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_fixed-layout">
     <thead>
       <tr class="slds-line-height_reset">
         <template if:true={columnData} for:each={columnData} for:item="column">
-          <th key={column} class="" scope="col">
+          <th key={column} scope="col">
             <div class="slds-truncate" title={column}>
               {column}
             </div>
@@ -19,23 +19,27 @@
           </td>
 
           <td>
-            <div class="slds-truncate">{record.Phone}</div>
+            <div class="slds-truncate">{record.Country__c}</div>
           </td>
 
           <td>
-            <div class="slds-truncate">{record.Fax}</div>
+            <div class="slds-truncate">{record.Genre__c}</div>
           </td>
 
           <td>
-            <div class="slds-truncate">{record.Email}</div>
+            <div class="slds-truncate">{record.Director__c}</div>
           </td>
 
           <td>
-            <div class="slds-truncate">{record.Department}</div>
+            <div class="slds-truncate">{record.Cast__c}</div>
           </td>
 
           <td>
-            <div class="slds-truncate">{record.Birthdate}</div>
+            <div class="slds-truncate">{record.YearOfProduction__c}</div>
+          </td>
+
+          <td>
+            <div class="slds-truncate">{record.LengthOfFilm__c}</div>
           </td>
 
           <td>

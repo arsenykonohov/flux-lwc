@@ -13,14 +13,19 @@ class Dispatcher {
       }
 
       case 'VIEW-CONTACT-CARD': {
-        const contactRecord = tableStorage.getRecordById(action.payload);
-        contactCardStorage.changeStorageDataAndSendToSubs({ contactRecord: contactRecord });
+        const contactRecord = tableStorage.getRecordById(action.payload.recordId);
+        contactCardStorage.changeStorageDataAndSendToSubs({ isShowDeleteBtn: action.payload.isShowDeleteBtn, contactRecord: contactRecord });
         break;
       }
 
       case 'ADD-TO-PREF-LIST': {
         const contactRecord = tableStorage.getRecordById(action.payload);
         prefListStorage.addRecordToPrefListAndSendDataToSubs(contactRecord);
+        break;
+      }
+
+      case 'DELETE-CONTACT-FROM-LIST': {
+        prefListStorage.deleteRecordFromList(action.payload);
         break;
       }
 

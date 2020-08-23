@@ -13,7 +13,7 @@ class Storage {
     this.subscribers = this.subscribers.filter((sub) => sub !== cb);
   }
 
-  changeStorageData = async (data) => {
+  changeStorageData = (data) => {
     return { ...this.storage, ...data };
   };
 
@@ -58,7 +58,7 @@ class TableStorage extends Storage {
   constructor() {
     super();
     this.storage.currentPage = 1;
-    this.storage.pageSize = 5;
+    this.storage.pageSize = 50;
     this._dispatchRequest = this._memoizeAsync(this._dispatchRequest);
     this.getRecordById = this._memoizeSync(this.getRecordById);
 
@@ -110,6 +110,8 @@ class PrefListStorage extends Storage {
   constructor() {
     super();
     this.storage.prefList = new Set();
+    this._addRecordToPrefListAndSendDataToSubs = this.compose(this._addRecordToPrefList, this._sendDataToSubs);
+    this._deleteRecordAndSendData = this.compose(this._deleteRecordFromPrefList, this.changeStorageData, this._sendDataToSubs);
   }
 
   _addRecordToPrefList = (data) => {
@@ -117,11 +119,16 @@ class PrefListStorage extends Storage {
     return this.storage;
   };
 
-  _addRecordToPrefListAndSendDataToSubs = this.compose(this._addRecordToPrefList, this._sendDataToSubs);
-
   async addRecordToPrefListAndSendDataToSubs(payload) {
-    console.log(payload);
     this.storage = await this._addRecordToPrefListAndSendDataToSubs(payload);
+  }
+
+  async deleteRecordFromList(payload) {
+    this.storage = await this._deleteRecordAndSendData(payload);
+  }
+
+  _deleteRecordFromPrefList = (recordId) => {
+    return { prefList: new Set([...this.storage.prefList].filter(record => record.Id !== recordId)) };
   }
 }
 

@@ -29,7 +29,8 @@
         </div>
 
         <div class="modal-footer">
-          <lightning-button variant="neutral" label="Add to Preferences" onclick={addToPreferencesHandler}></lightning-button>
+          <lightning-button if:false={isShowDeleteBtn} variant="neutral" label="Add to Preferences" onclick={addToPreferencesHandler}></lightning-button>
+          <lightning-button if:true={isShowDeleteBtn} variant="neutral" label="Delete from Preferences" onclick={deleteFromPrefList}></lightning-button>
         </div>
       </div>
     </div>

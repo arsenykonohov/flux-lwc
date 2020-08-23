@@ -38,7 +38,7 @@ export default class DataTable extends LightningElement {
   }
 
   viewContactInfoHandler(event) {
-    dispatcher.dispatch({ type: 'VIEW-CONTACT-CARD', payload: event.target.dataset.value });
+    dispatcher.dispatch({ type: 'VIEW-CONTACT-CARD', payload: { isShowDeleteBtn: false, recordId: event.target.dataset.value } });
   }
 
   addToPrefList(event) {

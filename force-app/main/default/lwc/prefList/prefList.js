@@ -1,5 +1,6 @@
 import { LightningElement } from 'lwc';
 import { prefListStorage } from 'c/storages';
+import { dispatcher } from 'c/dispatcher';
 
 export default class PrefList extends LightningElement {
   isListShow;
@@ -7,6 +8,7 @@ export default class PrefList extends LightningElement {
 
   constructor() {
     super();
+    this.storageCallbackBind = this.storageCallback.bind(this);
     prefListStorage.subscribe(this.storageCallback.bind(this));
   }
 
@@ -15,11 +17,8 @@ export default class PrefList extends LightningElement {
   }
 
   storageCallback(dataForSubs) {
-    console.log(dataForSubs);
-    this.prefList = [...dataForSubs.prefList];
+    this.prefList = dataForSubs.prefList;
   }
-
-  storageCallbackBind = this.storageCallback.bind(this);
 
   showBucketHandler() {
     this.isListShow = true;
@@ -30,8 +29,10 @@ export default class PrefList extends LightningElement {
   }
 
   viewContactInfo(event) {
-    dispatcher.dispatch({ type: 'VIEW-CONTACT-CARD', payload: event.target.dataset.value });
+    dispatcher.dispatch({ type: 'VIEW-CONTACT-CARD', payload: { isShowDeleteBtn: true, recordId: event.target.dataset.value } });
   }
 
-  deleteFromPrefList(event) {}
+  deleteFromPrefList(event) {
+    dispatcher.dispatch({ type: 'DELETE-CONTACT-FROM-LIST', payload: event.target.dataset.value });
+  }
 }
