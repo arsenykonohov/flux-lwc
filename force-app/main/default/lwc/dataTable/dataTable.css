@@ -1,0 +1,11 @@
+.table-wrap {
+  max-height: 32vw;
+  overflow: auto;
+}
+
+th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  border: 2px solid #f5f5dc;
+}

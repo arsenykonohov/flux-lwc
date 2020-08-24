@@ -15,11 +15,14 @@
             "c/dataTable": [
                 "dataTable/dataTable.js"
             ],
-            "c/contactCard": [
-                "contactCard/contactCard.js"
-            ],
             "c/prefList": [
                 "prefList/prefList.js"
+            ],
+            "c/filmCard": [
+                "filmCard/filmCard.js"
+            ],
+            "c/navBar": [
+                "navBar/navBar.js"
             ]
         }
     },

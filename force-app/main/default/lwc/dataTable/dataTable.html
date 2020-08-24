@@ -1,55 +1,65 @@
 <template>
-  <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_fixed-layout">
-    <thead>
-      <tr class="slds-line-height_reset">
-        <template if:true={columnData} for:each={columnData} for:item="column">
-          <th key={column} scope="col">
-            <div class="slds-truncate" title={column}>
-              {column}
-            </div>
-          </th>
-        </template>
-      </tr>
-    </thead>
-    <tbody>
-      <template if:true={cellsData} for:each={cellsData} for:item="record">
-        <tr key={record.Id} class="slds-hint-parent">
-          <td>
-            <div class="slds-truncate">{record.Name}</div>
-          </td>
-
-          <td>
-            <div class="slds-truncate">{record.Country__c}</div>
-          </td>
-
-          <td>
-            <div class="slds-truncate">{record.Genre__c}</div>
-          </td>
-
-          <td>
-            <div class="slds-truncate">{record.Director__c}</div>
-          </td>
-
-          <td>
-            <div class="slds-truncate">{record.Cast__c}</div>
-          </td>
-
-          <td>
-            <div class="slds-truncate">{record.YearOfProduction__c}</div>
-          </td>
-
-          <td>
-            <div class="slds-truncate">{record.LengthOfFilm__c}</div>
-          </td>
-
-          <td>
-            <lightning-button variant="neutral" label="View" data-value={record.Id} onclick={viewContactInfoHandler}></lightning-button>
-            <lightning-button variant="neutral" label="Add To Pref List" data-value={record.Id} onclick={addToPrefList}></lightning-button>
-          </td>
+  <div class="table-wrap">
+    <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_fixed-layout">
+      <thead>
+        <tr class="slds-line-height_reset">
+          <template if:true={columnData} for:each={columnData} for:item="column">
+            <th key={column} scope="col">
+              <div class="slds-truncate" title={column}>
+                {column}
+              </div>
+            </th>
+          </template>
         </tr>
-      </template>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <template if:true={cellsData} for:each={cellsData} for:item="record">
+          <tr key={record.Id} class="slds-hint-parent">
+            <td>
+              <div class="slds-truncate">{record.Name}</div>
+            </td>
+
+            <td>
+              <div class="slds-truncate">{record.Country__c}</div>
+            </td>
+
+            <td>
+              <div class="slds-truncate">{record.Genre__c}</div>
+            </td>
+
+            <td>
+              <div class="slds-truncate">{record.Director__c}</div>
+            </td>
+
+            <td>
+              <div class="slds-truncate">{record.Cast__c}</div>
+            </td>
+
+            <td>
+              <div class="slds-truncate">{record.YearOfProduction__c}</div>
+            </td>
+
+            <td>
+              <div class="slds-truncate">{record.LengthOfFilm__c}</div>
+            </td>
+
+            <td>
+              <div class="btn-group">
+                <lightning-button variant="neutral" label="View" data-value={record.Id} onclick={viewFilmInfoHandler}></lightning-button>
+
+                <lightning-button
+                  variant="neutral"
+                  label="Add To List"
+                  data-value={record.Id}
+                  onclick={addToPrefList}
+                ></lightning-button>
+              </div>
+            </td>
+          </tr>
+        </template>
+      </tbody>
+    </table>
+  </div>
   <div class="slds-grid slds-grid_vertical-align-end slds-p-bottom_medium slds-p-top_xx-small slds-grid_align-center">
     <div class="slds-col slds-size_3-of-12">
       <lightning-button

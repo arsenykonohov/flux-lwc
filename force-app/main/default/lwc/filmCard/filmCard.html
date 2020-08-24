@@ -1,0 +1,50 @@
+<template>
+    <template if:true={isShowFilmCard}>
+      <div class="modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <span class="close" onclick={closeContactCard}>&times;</span>
+  
+            <span>Film Info</span>
+          </div>
+  
+          <div class="modal-body">
+            <div class="modal-body-column">
+              <lightning-input if:true={filmRecord.Name} class="modal-body-cell" type="text" label="Name" readonly value={filmRecord.Name}></lightning-input>
+              <lightning-input if:true={filmRecord.Country__c} class="modal-body-cell" type="text" label="Country" readonly value={filmRecord.Country__c}></lightning-input>
+              <lightning-input if:true={filmRecord.Genre__c} class="modal-body-cell" type="text" label="Genre" readonly value={filmRecord.Genre__c}></lightning-input>
+              <lightning-input if:true={filmRecord.YearOfProduction__c} class="modal-body-cell" type="text" label="Year" readonly value={filmRecord.YearOfProduction__c}></lightning-input>
+              <lightning-input if:true={filmRecord.Translation__c} class="modal-body-cell" type="text" label="Translation" readonly value={filmRecord.Translation__c}></lightning-input>
+              <lightning-input if:true={filmRecord.Director__c} class="modal-body-cell" type="text" label="Director" readonly value={filmRecord.Director__c}></lightning-input>
+              <lightning-input if:true={filmRecord.OriginalAudio__c} class="modal-body-cell" type="text" label="Original Audio" readonly value={filmRecord.OriginalAudio__c}></lightning-input>
+              <lightning-input if:true={filmRecord.Subtitles__c} class="modal-body-cell" type="text" label="Subtitles" readonly value={filmRecord.Subtitles__c}></lightning-input>
+              <lightning-input if:true={filmRecord.Video__c} class="modal-body-cell" type="text" label="Video" readonly value={filmRecord.Video__c}></lightning-input>
+              <lightning-input if:true={filmRecord.LengthOfFilm__c} class="modal-body-cell" type="text" label="Length" readonly value={filmRecord.LengthOfFilm__c}></lightning-input>
+            </div>
+  
+            <div class="modal-body-column">
+              <img src={filmRecord.PosterUrl__c} alt="Poster"></img>
+            </div>
+          </div>
+  
+          <div class="modal-body-bottom">
+            <div if:true={filmRecord.Cast__c}>
+              <div class="label">Cast</div>
+              <div class="cast-info">{filmRecord.Cast__c}</div>
+            </div>
+              
+            <div if:true={filmRecord.Description__c}>
+              <div class="label">Description</div>
+              <div class="desc-info">{filmRecord.Description__c}</div>
+            </div>
+          </div>
+  
+          <div class="modal-footer">
+            <lightning-button if:false={isShowDeleteBtn} variant="neutral" label="Add to Preferences" onclick={addToPreferencesHandler}></lightning-button>
+            <lightning-button if:true={isShowDeleteBtn} variant="neutral" label="Delete from Preferences" onclick={deleteFromPrefList}></lightning-button>
+          </div>
+        </div>
+      </div>
+    </template>
+  </template>
+  

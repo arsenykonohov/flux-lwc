@@ -12,8 +12,13 @@ export default class DataTable extends LightningElement {
 
   constructor() {
     super();
-    tableStorage.subscribe(this.storageCallback.bind(this));
+    this.storageCallbackBind = this.storageCallback.bind(this);
+    tableStorage.subscribe(this.storageCallbackBind);
     dispatcher.dispatch({ type: 'INIT' });
+  }
+
+  disconnectedCallback() {
+    tableStorage.unsubscribe(this.storageCallbackBind);
   }
 
   storageCallback(dataFromStorage) {
@@ -37,8 +42,8 @@ export default class DataTable extends LightningElement {
     dispatcher.dispatch({ type: 'CHANGE-PAGE', payload: { currentPage: this.currentPage + 1 } });
   }
 
-  viewContactInfoHandler(event) {
-    dispatcher.dispatch({ type: 'VIEW-CONTACT-CARD', payload: { isShowDeleteBtn: false, recordId: event.target.dataset.value } });
+  viewFilmInfoHandler(event) {
+    dispatcher.dispatch({ type: 'VIEW-FILM-CARD', payload: { isShowDeleteBtn: false, recordId: event.target.dataset.value } });
   }
 
   addToPrefList(event) {

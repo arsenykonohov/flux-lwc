@@ -58,7 +58,8 @@ class TableStorage extends Storage {
   constructor() {
     super();
     this.storage.currentPage = 1;
-    this.storage.pageSize = 50;
+    this.storage.pageSize = 20;
+    this.storage.searchName = null;
     this._dispatchRequest = this._memoizeAsync(this._dispatchRequest);
     this.getRecordById = this._memoizeSync(this.getRecordById);
 
@@ -73,6 +74,10 @@ class TableStorage extends Storage {
     this.storage = await this._makeRequestAndSendData(this.storage);
   }
 
+  async searchFilms(payload) {
+    this.storage = await this._makeRequestAndSendData(payload);
+  }
+
   getRecordById(recordId) {
     return this.storage.cellsData.find((cellData) => cellData.Id === recordId);
   }
@@ -84,7 +89,7 @@ class TableStorage extends Storage {
         columnData: result.columnData,
         lastPage: Math.ceil(result.amountOfRecords / params.pageSize),
         cellsData: result.cellsData,
-        currentPage: params.currentPage + 1,
+        currentPage: params.currentPage,
         pageSize: params.pageSize,
       };
     });
@@ -93,12 +98,13 @@ class TableStorage extends Storage {
   _getParams(storage) {
     return {
       pageSize: storage.pageSize,
-      currentPage: storage.currentPage - 1,
+      currentPage: storage.currentPage,
+      searchName: storage.searchName,
     };
   }
 }
 
-class ContactCardStorage extends Storage {
+class FilmCardStorage extends Storage {
   _changeStorageDataAndSendToSubs = this.compose(this.changeStorageData, this._sendDataToSubs);
 
   async changeStorageDataAndSendToSubs(payload) {
@@ -128,10 +134,10 @@ class PrefListStorage extends Storage {
   }
 
   _deleteRecordFromPrefList = (recordId) => {
-    return { prefList: new Set([...this.storage.prefList].filter(record => record.Id !== recordId)) };
-  }
+    return { prefList: new Set([...this.storage.prefList].filter((record) => record.Id !== recordId)) };
+  };
 }
 
 export const tableStorage = new TableStorage();
-export const contactCardStorage = new ContactCardStorage();
+export const filmCardStorage = new FilmCardStorage();
 export const prefListStorage = new PrefListStorage();

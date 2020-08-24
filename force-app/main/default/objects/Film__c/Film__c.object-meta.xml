@@ -159,19 +159,6 @@
         <type>Text</type>
     </nameField>
     <pluralLabel>Films</pluralLabel>
-    <profileSearchLayouts>
-        <fields>NAME</fields>
-        <fields>Cast__c</fields>
-        <fields>Country__c</fields>
-        <fields>Description__c</fields>
-        <fields>Director__c</fields>
-        <fields>Genre__c</fields>
-        <fields>LengthOfFilm__c</fields>
-        <fields>Subtitles__c</fields>
-        <fields>Translation__c</fields>
-        <fields>YearOfProduction__c</fields>
-        <profileName>System Administrator</profileName>
-    </profileSearchLayouts>
     <searchLayouts>
         <customTabListAdditionalFields>Audio__c</customTabListAdditionalFields>
         <customTabListAdditionalFields>Cast__c</customTabListAdditionalFields>

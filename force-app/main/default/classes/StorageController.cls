@@ -1,12 +1,13 @@
 public without sharing class StorageController {
     private static final List<String> columnData = new List<String>{
         'Name',
-        'Country__c',
-        'Genre__c',
-        'Director__c',
-        'Cast__c',
-        'YearOfProduction__c',
-        'LengthOfFilm__c'
+        'Country',
+        'Genre',
+        'Director',
+        'Cast',
+        'Year',
+        'Length',
+        'Actions'    
     };
 
     private static final List<String> fieldsForQuery = new List<String>{
@@ -34,7 +35,8 @@ public without sharing class StorageController {
         SoqlService soql = new SoqlService('Film__c');
         soql.setFields(fieldsForQuery);
         soql.setLimit(params.pageSize);
-        soql.setOffset(params.pageSize * params.currentPage);
+        soql.setOffset(params.pageSize * (params.currentPage - 1));
+        soql.setSearchName(params.searchName);
 
         Response resp = new Response();
         resp.amountOfRecords = soql.getAmountOfRecords();
@@ -47,6 +49,7 @@ public without sharing class StorageController {
     public class ParamsWrapper {
         @AuraEnabled public Integer pageSize { get; set; }
         @AuraEnabled public Integer currentPage { get; set; }
+        @AuraEnabled public String searchName { get; set; }
     }
 
     public class Response {
